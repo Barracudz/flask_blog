@@ -1,8 +1,13 @@
 from datetime import datetime
-from flaskblog import db
+from flaskblog import db, login_manager
+from flask_login import UserMixin
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # Class represents a table in the database
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     # String of max 20 chars, needs to be unique and must be given
     username = db.Column(db.String(20), unique=True, nullable=False)
